@@ -55,10 +55,10 @@
 
 /* board_init_f */
 #define	CONFIG_SYS_SDRAM_BASE			0x40000000
-#define	CONFIG_SYS_SDRAM_SIZE			0x38000000
+#define	CONFIG_SYS_SDRAM_SIZE			0x40000000
 
 /* dram 1 bank num */
-#define CONFIG_NR_DRAM_BANKS			1
+#define CONFIG_NR_DRAM_BANKS			2
 
 /* relocate_code and  board_init_r */
 #define	CONFIG_SYS_MALLOC_END			(CONFIG_MEM_MALLOC_START + \
@@ -296,7 +296,7 @@
 #define CONFIG_PHY_REALTEK
 
 #define CONFIG_ETHPRIME			"RTL8211"
-#define CONFIG_PHY_ADDR			3
+#define CONFIG_PHY_ADDR			7
 
 #define CONFIG_DW_ALTDESCRIPTOR
 
@@ -374,47 +374,7 @@
 	"consoleon=setenv console=" CONFIG_DEFAULT_CONSOLE		\
 		"; saveenv; reset\0"					\
 	"consoleoff=setenv console=ram; saveenv; reset\0"		\
-	"rootdev=" __stringify(CONFIG_ROOT_DEV) "\0"			\
-	"rootpart=" __stringify(CONFIG_ROOT_PART) "\0"			\
-	"bootpart=" __stringify(CONFIG_BOOT_PART) "\0"			\
-	"root_rw=rw\0"							\
-	"opts=loglevel=4\0"						\
-	"rootfs_type=ext4\0"						\
-	"dfu_alt_info=" CONFIG_DFU_ALT					\
-	"lcd1_0=s6e8fa0\0"						\
-	"lcd2_0=gst7d0038\0"						\
-	"lcd_panel=s6e8fa0\0"						\
-	"sdrecovery=sd_recovery mmc 1:3 48000000 partmap_emmc.txt\0"	\
-	"factory_load=factory_info load mmc 0 "				\
-		__stringify(CONFIG_FACTORY_INFO_START) " "		\
-		__stringify(CONFIG_FACTORY_INFO_SIZE) "\0"		\
-	"factory_save=factory_info save mmc 0 "				\
-		__stringify(CONFIG_FACTORY_INFO_START) " "		\
-		__stringify(CONFIG_FACTORY_INFO_SIZE) "\0"		\
-	"factory_set_ethaddr=run factory_load; gen_eth_addr ;"		\
-		"factory_info write ethaddr $ethaddr;"			\
-		"run factory_save\0"					\
-	"load_args=run factory_load; setenv bootargs ${console} "	\
-		"root=/dev/mmcblk${rootdev}p${rootpart} ${root_rw} "	\
-		"rootfstype=${rootfs_type} ${opts} ${recoverymode} "	\
-		"drm_panel=$lcd_panel\0"				\
-	"load_kernel=ext4load mmc ${rootdev}:${bootpart} $kerneladdr $kernel_file\0" \
-	"load_initrd=ext4load mmc ${rootdev}:${bootpart} $ramdiskaddr $ramdisk_file\0" \
-	"boot_cmd_initrd="						\
-		"run load_fdt; run load_kernel; run load_initrd;"	\
-		"booti $kerneladdr $ramdiskaddr $fdtaddr\0"		\
-	"boot_cmd_mmcboot="						\
-		"run load_fdt; run load_kernel;"			\
-		"booti $kerneladdr - $fdtaddr\0"			\
-	"ramfsboot=run load_args; run boot_cmd_initrd\0"		\
-	"mmcboot=run load_args; run boot_cmd_mmcboot\0"			\
-	"recovery_cmd=run sdrecovery; setenv recoverymode recovery\0"	\
-	"recoveryboot=run recovery_cmd; run ramfsboot\0"		\
-	"hwtestboot=setenv rootdev 1;"					\
-		"setenv opts rootfstype=ext4 rootwait loglevel=7;"	\
-		"setenv fdtfile s5p6818-artik710-explorer.dtb; "	\
-		"run mmcboot\0"						\
-	"hwtest_recoveryboot=run recovery_cmd; run hwtestboot\0"	\
-	"bootcmd=run ramfsboot\0"
+	"ipaddr=10.42.0.2\0" \
+	"serverip=10.42.0.1\0"
 
 #endif /* __CONFIG_H__ */
