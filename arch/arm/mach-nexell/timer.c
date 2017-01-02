@@ -21,7 +21,7 @@
 static unsigned long timestamp;
 static unsigned long lastdec;
 /* set .data section, before u-boot is relocated */
-static int	timerinit __attribute__ ((section(".data")));
+static int	timerinit=0;
 
 /* macro to hw timer tick config */
 static long	TIMER_FREQ  = 1000000;
@@ -103,7 +103,7 @@ static inline unsigned long timer_read(void __iomem *base, int ch)
 int timer_init(void)
 {
 	struct clk *clk = NULL;
-	char name[16] = "pclk";
+	char name[16] = "nx-timer.0";
 	int ch = CONFIG_TIMER_SYS_TICK_CH;
 	unsigned long rate, tclk = 0;
 	unsigned long mout, thz, cmp = -1UL;
@@ -111,12 +111,17 @@ int timer_init(void)
 	int mux = 0, scl = 0;
 	void __iomem *base = (void __iomem *)PHY_BASEADDR_TIMER;
 
-	if (timerinit)
+	debug("%s:%d\n", __FILE__, __LINE__);
+	if (timerinit){
+		debug("%s:%d\n", __FILE__, __LINE__);
 		return 0;
+	}
 
 	/* get with PCLK */
 	clk  = clk_get(name);
-	rate = clk_get_rate(clk);
+	rate = 400000;
+ 	clk_set_rate(clk, 400000);
+	clk_enable(clk);
 	for (mux = 0; 5 > mux; mux++) {
 		mout = rate/(1<<mux), scl = mout/TIMER_FREQ, thz = mout/scl;
 		if (!(mout%TIMER_FREQ) && 256 > scl) {

@@ -729,12 +729,32 @@ int clk_set_rate(struct clk *clk, unsigned long rate)
 	return clk->rate;
 }
 
+void nx_clk_print(void)
+{
+	struct clk_dev *cdev = st_clk_devs;
+	int i = 0;
+
+	for (i = 0; (CLK_CORE_NUM+CLK_PERI_NUM) > i; i++, cdev++) {
+		debug("%s:%d cdev:0x%08x\n", __FILE__, __LINE__, cdev);
+		debug("%s:%d cdev->peri:0x%08x\n", __FILE__, __LINE__, cdev->peri);
+		debug("%s:%d cdev->name:%s\n", __FILE__, __LINE__, cdev->name);
+	}
+
+	debug("CPU : Clock Generator= %d EA, ", CLK_DEVS_NUM);
+}
+static int isprinted = 0;
 int clk_enable(struct clk *clk)
 {
 	struct clk_dev *cdev = clk_container(clk);
 	struct clk_dev_peri *peri = cdev->peri;
 	int i = 0, inv = 0;
+	if(!isprinted){
+		nx_clk_print();
+		isprinted = 1;
+	}
 
+	debug("%s:%d peri:0x%08x\n", __FILE__, __LINE__, peri);
+	debug("%s:%d cdev:0x%08x\n", __FILE__, __LINE__, cdev);
 	if (!peri)
 		return 0;
 
@@ -837,6 +857,9 @@ void __init nx_clk_init(void)
 		peri = &clk_periphs[i-CLK_CORE_NUM];
 		peri->base = (void *)peri->base;
 
+		debug("%s:%d cdev:0x%08x\n", __FILE__, __LINE__, cdev);
+		debug("%s:%d cdev->peri:0x%08x\n", __FILE__, __LINE__, cdev->peri);
+		debug("%s:%d cdev->name:0x%08x\n", __FILE__, __LINE__, cdev->name);
 		cdev->peri = peri;
 		cdev->name = peri->dev_name;
 
@@ -860,3 +883,5 @@ void __init nx_clk_init(void)
 
 	debug("CPU : Clock Generator= %d EA, ", CLK_DEVS_NUM);
 }
+
+

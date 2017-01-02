@@ -16,6 +16,7 @@
 #define CONFIG_SYS_LDSCRIPT "arch/arm/cpu/armv8/u-boot.lds"
 
 #define	CONFIG_MACH_S5P6818
+//#define DEBUG
 
 /*-----------------------------------------------------------------------
  *  System memory Configuration
@@ -146,7 +147,7 @@
  * serial console configuration
  */
 #define CONFIG_S5P_SERIAL
-#define CONFIG_S5P_SERIAL_INDEX			3
+#define CONFIG_S5P_SERIAL_INDEX			0
 #define CONFIG_S5P_SERIAL_CLOCK			50000000
 
 #define CONFIG_BAUDRATE				115200

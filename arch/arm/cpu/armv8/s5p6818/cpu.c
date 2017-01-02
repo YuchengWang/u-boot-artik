@@ -34,8 +34,12 @@ void cpu_base_init(void)
 }
 
 #if defined(CONFIG_ARCH_CPU_INIT)
+void disable_watchdog(){
+	writel(0, 0xc0019000);
+}
 int arch_cpu_init(void)
 {
+	disable_watchdog();
 	flush_dcache_all();
 	cpu_base_init();
 	nx_clk_init();
